@@ -45,7 +45,6 @@ const Weather = ({ location, city }: TWeather) => {
 
   // date object
   const date = new Date();
-  console.log(city);
   return (
     <div className="m-auto">
       <div className=" bg-sky-500 text-white rounded-[32px] py-12 px-6">
