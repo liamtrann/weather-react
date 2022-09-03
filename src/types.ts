@@ -47,7 +47,7 @@ export type TWeatherDataDisplay = {
   relativeHumidity: number;
   pressure: { value: number; trend: number };
   visibility: number;
-  time: { local: string; utc: string };
+  time: Date;
 };
 
 export interface IAction {

@@ -64,6 +64,8 @@ function Map({ setLocation, setCity }: TMap) {
             <Marker position={center} />
           </GoogleMap>
         ) : null}
+      </div>
+      <div>
         {address && <p className="text-black-600 mt-5 font-bold">{address}</p>}
         {geocoderError && <p className="text-red-600 mt-5">{geocoderError}</p>}
       </div>

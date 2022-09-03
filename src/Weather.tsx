@@ -1,21 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-// import axios
-import axios from "axios";
-
-// import icons
 import {
-  IoMdSunny,
-  IoMdRainy,
-  IoMdCloudy,
-  IoMdSnow,
-  IoMdThunderstorm,
-  IoMdSearch,
-} from "react-icons/io";
-
-import {
-  BsCloudHaze2Fill,
-  BsCloudDrizzleFill,
   BsEye,
   BsWater,
   BsThermometer,
@@ -26,15 +11,8 @@ import { TbTemperatureCelsius } from "react-icons/tb";
 import { TCenter, TWeather, TWeatherDataDisplay } from "./types";
 import { getObservation } from "./actions/observationAction";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
-
-const defaultWeather = {
-  relativeHumidity: 69,
-  temperature: 23,
-  time: { local: "2022-09-02T22:05", utc: "2022-09-03T02:05" },
-  visibility: 14,
-  wind: { direction: "E", speed: 19, gust: 29 },
-  pressure: { value: 102, trend: 1 },
-};
+import { defaultWeather } from "./defaultValue";
+import { returnIcon } from "./icons";
 
 const Weather = ({ location, city }: TWeather) => {
   const [weather, setWeather] = useState<TWeatherDataDisplay>(defaultWeather);
@@ -56,7 +34,7 @@ const Weather = ({ location, city }: TWeather) => {
     setWeather({
       relativeHumidity: relativeHumidity,
       temperature: temperature,
-      time: time,
+      time: new Date(time.utc),
       visibility: visibility,
       wind: wind,
       pressure: pressure,
@@ -64,20 +42,6 @@ const Weather = ({ location, city }: TWeather) => {
   };
 
   useMemo(() => fillWeather(data), [data]);
-
-  const responseIcon = new Map([
-    ["Clouds", <IoMdCloudy />],
-    ["Haze", <BsCloudHaze2Fill />],
-    ["Rain", <IoMdRainy className="text-[#31cafb]" />],
-    ["Clear", <IoMdSunny className="text-[#ffde33]" />],
-    ["Drizzle", <BsCloudDrizzleFill className="text-[#31cafb]" />],
-    ["Snow", <IoMdSnow className="text-[#31cafb]" />],
-    ["Thunderstorm", <IoMdThunderstorm />],
-  ]);
-
-  const returnIcon = (icon: string) => {
-    return responseIcon.get(icon);
-  };
 
   // date object
   const date = new Date();
@@ -88,15 +52,15 @@ const Weather = ({ location, city }: TWeather) => {
         <div>
           <div className="flex items-center gap-x-5">
             <div className="text-[44px] md:text-[87px]">
-              {returnIcon("Rain")}
+              {returnIcon(weather.temperature)}
             </div>
             <div>
-              <div className="text-xl md:text-2xl font-semibold">
+              <div className="text-xl md:text-2xl font-semibold w-40">
                 {city ? city : "Toronto"}
               </div>
               <div>
-                {date.getUTCDate()}/{date.getUTCMonth() + 1}/
-                {date.getUTCFullYear()}
+                {weather.time.getUTCDate()}/{weather.time.getUTCMonth() + 1}/
+                {weather.time.getUTCFullYear()}
               </div>
             </div>
           </div>
@@ -116,7 +80,31 @@ const Weather = ({ location, city }: TWeather) => {
                 <BsEye />
               </div>
               <div>
-                Visibility <span className="ml-2">20 km</span>
+                Visibility <span className="ml-2">{weather.visibility} km</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <div className="text-[20px]">
+                <BsWind />
+              </div>
+              <div>
+                Wind <span className="ml-2">{weather.wind.speed} m/s</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <div className="text-[20px]">
+                <BsWater />
+              </div>
+              <div>
+                Humidity <span className="ml-2">{weather.relativeHumidity}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <div className="text-[20px]">
+                <BsThermometer />
+              </div>
+              <div>
+                Pressure <span className="ml-2">{weather.pressure.value}</span>
               </div>
             </div>
           </div>
