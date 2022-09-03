@@ -1,6 +1,6 @@
 import axios from "axios";
 import { addSyntheticLeadingComment } from "typescript";
-import { TCenter } from "../types";
+import { TCenter } from "../types/types";
 import {
   OBSERVATION_FAIL,
   OBSERVATION_LOADING,

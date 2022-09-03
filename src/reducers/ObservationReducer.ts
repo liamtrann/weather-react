@@ -3,7 +3,7 @@ import {
   OBSERVATION_LOADING,
   OBSERVATION_SUCCESS,
 } from "../actions/types";
-import { IAction, ObservationReponse } from "../types";
+import { IAction, ObservationReponse } from "../types/types";
 
 const initialState = {
   observation: {},

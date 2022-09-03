@@ -8,24 +8,26 @@ import {
 } from "react-icons/bs";
 
 import { TbTemperatureCelsius } from "react-icons/tb";
-import { TCenter, TWeather, TWeatherDataDisplay } from "./types";
-import { getObservation } from "./actions/observationAction";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { defaultWeather } from "./defaultValue";
-import { returnIcon } from "./icons";
+import { TWeatherDataDisplay } from "../types/types";
+import { getObservation } from "../actions/observationAction";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { defaultWeather } from "../config/defaultValue";
+import { returnIcon } from "../icons";
 
-const Weather = ({ location, city }: TWeather) => {
+const Weather = () => {
   const [weather, setWeather] = useState<TWeatherDataDisplay>(defaultWeather);
   const dispatch = useAppDispatch();
   const data = useAppSelector((state: any) => state.Observation.data);
+  const locationData = useAppSelector((state: any) => state.Location);
 
-  const fetchData = (location: TCenter | undefined) => {
-    dispatch(getObservation(location));
-  };
   // fetch the data
   useEffect(() => {
-    fetchData(location);
-  }, [location]);
+    if (locationData.loading || locationData.errorMsg) return;
+    dispatch(getObservation(locationData.geoLocation.location));
+    console.log(locationData)
+    console.log(data)
+
+  }, [locationData]);
 
   const fillWeather = (data: any) => {
     if (!data) return
@@ -43,8 +45,6 @@ const Weather = ({ location, city }: TWeather) => {
 
   useMemo(() => fillWeather(data), [data]);
 
-  // date object
-  const date = new Date();
   return (
     <div className="m-auto">
       <div className=" bg-sky-500 text-white rounded-[32px] py-12 px-6">
@@ -55,7 +55,7 @@ const Weather = ({ location, city }: TWeather) => {
             </div>
             <div>
               <div className="text-xl md:text-2xl font-semibold w-40">
-                {city ? city : "Toronto"}
+                {locationData.geoLocation.address ?? "Toronto"}
               </div>
               <div>
                 {weather.time.getUTCDate()}/{weather.time.getUTCMonth() + 1}/

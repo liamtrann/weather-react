@@ -3,12 +3,10 @@ export type TCenter = {
   lng: number;
 };
 export type TMap = {
-  setLocation: (e: TCenter) => void;
   setCity: (e: string) => void;
 };
 
 export type TWeather = {
-  location: TCenter | undefined;
   city: string;
 };
 
@@ -54,3 +52,11 @@ export interface IAction {
   type: string;
   payload?: any;
 }
+
+export type LocationResponse = {
+  location: {
+    lat: number;
+    lng: number;
+  };
+  address: string;
+};

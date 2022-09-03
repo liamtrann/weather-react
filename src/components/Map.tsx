@@ -1,42 +1,35 @@
 import React, { useState } from "react";
-import "./App.css";
-import { geocoder } from "./google-maps.api";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import { TMap, TCenter } from "./types";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { getLocation } from "../actions/locationAction";
+import { defaultLocation } from "../config/defaultValue";
 
-function Map({ setLocation, setCity }: TMap) {
+function Map() {
   const [geocoderError, setGeocoderError] = useState<any>(null);
   const [rawAddress, setRawAddress] = useState<string>("");
-  const [center, setCenter] = useState<TCenter>({
-    lat: 43.653226,
-    lng: -79.3831843,
-  });
-  const [address, setAddress] = useState<string>("");
+  // const [center, setCenter] = useState<TCenter>({
+  //   lat: 43.653226,
+  //   lng: -79.3831843,
+  // });
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyC1pRtzKYbiiDPHtVSFc6mvXQUi2nTG-O8",
   });
+
+  const dispatch = useAppDispatch();
+  const locationData = useAppSelector((state: any) => state.Location);
+
   const handleFindLocationClick = () => {
     if (!rawAddress) {
       setGeocoderError("Address is required to find location.");
       return;
     }
     setGeocoderError(null);
-    geocoder(rawAddress)
-      .then((res) => {
-        if (res) {
-          const { address, location } = res;
-          setAddress(address);
-          setCity(address);
-          setLocation(location);
-          setCenter(location);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setGeocoderError(err.message);
-      });
+    dispatch(getLocation(rawAddress))
   };
+
+  console.log(locationData)
+
   return (
     <div className="m-auto">
       <div className="w-full flex">
@@ -58,15 +51,15 @@ function Map({ setLocation, setCity }: TMap) {
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={{ width: "100%", height: "100%" }}
-            center={center}
+            center={locationData.geoLocation.location ?? defaultLocation}
             zoom={10}
           >
-            <Marker position={center} />
+            <Marker position={locationData.geoLocation.location ?? defaultLocation} />
           </GoogleMap>
         ) : null}
       </div>
       <div>
-        {address && <p className="text-black-600 mt-5 font-bold">{address}</p>}
+        {locationData.geoLocation.address && <p className="text-black-600 mt-5 font-bold">{locationData.geoLocation.address}</p>}
         {geocoderError && <p className="text-red-600 mt-5">{geocoderError}</p>}
       </div>
     </div>
