@@ -15,7 +15,7 @@ function App() {
     setCity(place);
   };
   return (
-    <h1 className="grid md:grid-cols-2 h-screen gap-4">
+    <h1 className="grid md:grid-cols-2 h-screen gap-4 mt-5">
       <Map setLocation={handleLocation} setCity={handleCity}/>
       <Weather location={location} city={city}/>
     </h1>
