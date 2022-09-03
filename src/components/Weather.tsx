@@ -22,12 +22,10 @@ const Weather = () => {
 
   // fetch the data
   useEffect(() => {
-    if (locationData.loading || locationData.errorMsg) return;
+    if (!locationData.loading || !locationData.errorMsg) return;
     dispatch(getObservation(locationData.geoLocation.location));
-    console.log(locationData)
-    console.log(data)
 
-  }, [locationData]);
+  }, [dispatch, locationData]);
 
   const fillWeather = (data: any) => {
     if (!data) return

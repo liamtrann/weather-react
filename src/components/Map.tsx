@@ -7,10 +7,6 @@ import { defaultLocation } from "../config/defaultValue";
 function Map() {
   const [geocoderError, setGeocoderError] = useState<any>(null);
   const [rawAddress, setRawAddress] = useState<string>("");
-  // const [center, setCenter] = useState<TCenter>({
-  //   lat: 43.653226,
-  //   lng: -79.3831843,
-  // });
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyC1pRtzKYbiiDPHtVSFc6mvXQUi2nTG-O8",
@@ -27,8 +23,6 @@ function Map() {
     setGeocoderError(null);
     dispatch(getLocation(rawAddress))
   };
-
-  console.log(locationData)
 
   return (
     <div className="m-auto">
