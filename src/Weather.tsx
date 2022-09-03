@@ -50,6 +50,7 @@ const Weather = ({ location, city }: TWeather) => {
   }, [location]);
 
   const fillWeather = (data: any) => {
+    if (!data) return
     const { relativeHumidity, temperature, time, visibility, wind, pressure } =
       data;
     setWeather({
